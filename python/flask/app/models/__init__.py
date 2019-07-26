@@ -21,7 +21,7 @@ class TranslatedText(db.Model):  # type: ignore
     language: str = db.Column(db.String(2), db.ForeignKey("language.id"), nullable=True)
     value: str = db.Column(db.Text, nullable=False)
     created_at: datetime = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    last_modified_at: datetime = db.Column(
+    updated_at: datetime = db.Column(
         db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
@@ -32,7 +32,7 @@ class TranslatedText(db.Model):  # type: ignore
             f"language={self.language}, "
             f"value={self.value}, "
             f"created_at={self.created_at}, "
-            f"last_modified_at={self.last_modified_at})"
+            f"updated_at={self.last_modified_at})"
         )
 
 

@@ -47,7 +47,7 @@ def upgrade():
         sa.Column("language", sa.String(length=2), nullable=True),
         sa.Column("value", sa.Text(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("last_modified_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(["language"], ["language.id"]),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("key", "language", name="unique_key_language"),
