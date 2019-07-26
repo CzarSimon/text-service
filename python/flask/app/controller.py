@@ -12,6 +12,7 @@ from app.httputil.instrumentation import trace
 # Internal modules
 from app.config import LANGUAGE_HEADER
 from app.service import health
+from app.service import text_service
 
 
 _log = logging.getLogger(__name__)
@@ -19,12 +20,14 @@ _log = logging.getLogger(__name__)
 
 @trace("controller")
 def get_text_by_key(key: str) -> flask.Response:
-    return httputil.create_ok_response()
+    text = text_service.get_text_by_key(key, _get_language())
+    return httputil.create_response(text)
 
 
 @trace("controller")
 def get_text_group(group_id: str) -> flask.Response:
-    return httputil.create_ok_response()
+    texts = text_service.get_text_by_group(group_id, _get_language())
+    return httputil.create_response(texts)
 
 
 @trace("controller")
