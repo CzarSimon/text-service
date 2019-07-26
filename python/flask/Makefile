@@ -1,4 +1,4 @@
-export prometheus_multiproc_dir=/tmp/text-service/prom-data
+export prometheus_multiproc_dir=/tmp/text-service/prom-datad
 export DB_USERNAME=textservice
 export DB_PASSWORD=password
 export DB_HOST=127.0.0.1
