@@ -37,7 +37,7 @@ REQUESTS_TOTAL = Counter(
     registry=metrics_registry,
 )
 REQUEST_LATENCY = Histogram(
-    "request_latency_ms",
+    "http_request_latency_ms",
     "Request latency in milliseconds",
     ["method", "endpoint"],
     registry=metrics_registry,
