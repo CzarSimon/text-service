@@ -3,6 +3,7 @@ import flask
 
 # Internal modules
 from app import app
+from app import controller
 from app import httputil
 
 
@@ -18,5 +19,5 @@ def get_text_group(group_id: str) -> flask.Response:
 
 @app.route("/health", methods=["GET"])
 def check_health() -> flask.Response:
-    return httputil.create_ok_response()
+    return controller.check_health()
 
