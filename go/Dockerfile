@@ -1,4 +1,5 @@
 FROM golang:1.12-alpine3.10 AS build
+RUN apk update && apk add git
 
 # Copy source
 WORKDIR /app/text-service
