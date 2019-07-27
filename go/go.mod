@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/gin-gonic/gin v1.4.1-0.20190710050240-502c898d755b
 	github.com/mattn/go-sqlite3 v1.11.0
+	github.com/pkg/errors v0.8.0
 	github.com/prometheus/client_golang v1.0.0
 	github.com/rubenv/sql-migrate v0.0.0-20190717103323-87ce952f7079
 	github.com/satori/go.uuid v1.2.0

@@ -19,11 +19,6 @@ const (
 	AcceptLanguage  = "Accept-Language"
 )
 
-// Default values
-const (
-	DefaltLocale = "en"
-)
-
 // Prometheus metrics.
 var (
 	requestsTotal = promauto.NewCounterVec(
@@ -91,10 +86,6 @@ func GetRequestID(c *gin.Context) string {
 func Locale() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		lang := c.GetHeader(AcceptLanguage)
-		if lang == "" {
-			lang = DefaltLocale
-		}
-
 		c.Set(AcceptLanguage, lang)
 		c.Next()
 	}

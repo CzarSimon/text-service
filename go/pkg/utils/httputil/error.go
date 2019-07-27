@@ -12,6 +12,13 @@ import (
 
 var errLog = logger.GetDefaultLogger("httputil/errorLog")
 
+// Default errors
+var (
+	ErrBadRequest          = BadRequest("")
+	ErrNotFound            = NotFound("")
+	ErrInternalServerError = InternalServerError("")
+)
+
 // HandleErrors wrapper function to deal with encountered errors
 // during request handling.
 func HandleErrors() gin.HandlerFunc {

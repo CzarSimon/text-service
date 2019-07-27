@@ -12,7 +12,6 @@ CREATE TABLE `translated_text` (
   `value`      TEXT NOT NULL,
   `created_at` TIMESTAMP NOT NULL,
   `updated_at` TIMESTAMP NOT NULL,
-  PRIMARY KEY (`id`),
   FOREIGN KEY (`language`) REFERENCES `language`(`id`),
   UNIQUE(`key`, `language`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;;
