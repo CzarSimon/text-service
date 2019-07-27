@@ -134,13 +134,13 @@ func TestSqliteConfig(t *testing.T) {
 
 func TestMysqlConfig(t *testing.T) {
 	var cfg dbutil.Config = dbutil.MysqlConfig{
-		Host:     "db.doktor24.se",
+		Host:     "db.com",
 		User:     "simon",
 		Password: "pwd",
-		Database: "go24",
+		Database: "texts",
 	}
 
-	expDSN := "simon:pwd@tcp(db.doktor24.se:3306)/go24"
+	expDSN := "simon:pwd@tcp(db.com:3306)/texts"
 	dsn := cfg.DSN()
 	if dsn != expDSN {
 		t.Errorf("1. MysqlConfig.DSN() failed. Expected: [%s] Got: [%s]", expDSN, dsn)
@@ -153,14 +153,14 @@ func TestMysqlConfig(t *testing.T) {
 
 	cfg = dbutil.MysqlConfig{
 		Protocol: "mysql",
-		Host:     "db.doktor24.se",
+		Host:     "db.com",
 		Port:     "13306",
 		User:     "simon",
 		Password: "pwd",
-		Database: "go24",
+		Database: "texts",
 	}
 
-	expDSN = "simon:pwd@mysql(db.doktor24.se:13306)/go24"
+	expDSN = "simon:pwd@mysql(db.com:13306)/texts"
 	dsn = cfg.DSN()
 	if dsn != expDSN {
 		t.Errorf("2. MysqlConfig.DSN() failed. Expected: [%s] Got: [%s]", expDSN, dsn)
@@ -169,5 +169,46 @@ func TestMysqlConfig(t *testing.T) {
 	driver = cfg.Driver()
 	if driver != "mysql" {
 		t.Errorf("2. MysqlConfig.Driver() failed. Expected: [mysql] Got: [%s]", driver)
+	}
+}
+
+func TestPostgresConfig(t *testing.T) {
+	var cfg dbutil.Config = dbutil.PostgresConfig{
+		Host:     "db.com",
+		User:     "simon",
+		Password: "pwd",
+		Database: "texts",
+	}
+
+	expDSN := "host=db.com user=simon password=pwd dbname=texts port=5432 sslmode=disable binary_parameters=no"
+	dsn := cfg.DSN()
+	if dsn != expDSN {
+		t.Errorf("1. PostgresConfig.DSN() failed. Expected: [%s] Got: [%s]", expDSN, dsn)
+	}
+
+	driver := cfg.Driver()
+	if driver != "postgres" {
+		t.Errorf("1. PostgresConfig.Driver() failed. Expected: [postgres] Got: [%s]", driver)
+	}
+
+	cfg = dbutil.PostgresConfig{
+		Host:            "db.com",
+		Port:            "6432",
+		User:            "simon",
+		Password:        "pwd",
+		Database:        "texts",
+		SSLMode:         "verify",
+		BinaryParamters: "someParam",
+	}
+
+	expDSN = "host=db.com user=simon password=pwd dbname=texts port=6432 sslmode=verify binary_parameters=someParam"
+	dsn = cfg.DSN()
+	if dsn != expDSN {
+		t.Errorf("2. PostgresConfig.DSN() failed. Expected: [%s] Got: [%s]", expDSN, dsn)
+	}
+
+	driver = cfg.Driver()
+	if driver != "postgres" {
+		t.Errorf("2. PostgresConfig.Driver() failed. Expected: [postgres] Got: [%s]", driver)
 	}
 }

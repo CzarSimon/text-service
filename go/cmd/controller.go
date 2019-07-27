@@ -38,7 +38,13 @@ func (e *env) getTextGroup(c *gin.Context) {
 		return
 	}
 
-	httputil.SendOK(c)
+	texts, err := e.textGetter.GetGroup(ctx, c.Param("groupId"))
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, texts)
 }
 
 func createContext(c *gin.Context) *context.Context {

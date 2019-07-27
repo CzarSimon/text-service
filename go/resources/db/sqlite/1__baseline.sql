@@ -16,21 +16,21 @@ CREATE TABLE `translated_text` (
   UNIQUE(`key`, `language`)
 );
 
-CREATE TABLE `group` (
+CREATE TABLE `text_group` (
   `id`           VARCHAR(100) PRIMARY KEY,
   `created_at`   DATETIME NOT NULL
 );
 
-CREATE TABLE `text_group` (
+CREATE TABLE `text_group_membership` (
   `id`         INTEGER PRIMARY KEY,
   `text_key`   VARCHAR(100) NOT NULL,
   `group_id`   VARCHAR(100) NOT NULL,
   `created_at` DATETIME NOT NULL,
-  FOREIGN KEY (`group_id`) REFERENCES `group`(`id`)
+  FOREIGN KEY (`group_id`) REFERENCES `text_group`(`id`)
 );
 
 -- +migrate Down
+DROP TABLE IF EXISTS `text_group_membership`;
 DROP TABLE IF EXISTS `text_group`;
-DROP TABLE IF EXISTS `group`;
 DROP TABLE IF EXISTS `translated_text`;
 DROP TABLE IF EXISTS `language`;

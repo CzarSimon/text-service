@@ -38,7 +38,7 @@ func (r *textRepo) Find(ctx *context.Context, key, language string) (models.Tran
 	}
 
 	if err != nil {
-		return models.TranslatedText{}, errors.Wrapf(err, "Failed to query translated_text: %s", language)
+		return models.TranslatedText{}, errors.Wrapf(err, "Failed to query translated_text. language=%s", language)
 	}
 
 	return t, nil
@@ -52,7 +52,7 @@ func (r *textRepo) Save(ctx *context.Context, text models.TranslatedText) error 
 	now := time.Now()
 	_, err := r.db.ExecContext(ctx, saveTextQuery, text.Key, text.Language, text.Value, now, now)
 	if err != nil {
-		return errors.Wrapf(err, "Failed to insert translated_text: key=%s", text.Key)
+		return errors.Wrapf(err, "Failed to insert translated_text. key=%s", text.Key)
 	}
 
 	return nil

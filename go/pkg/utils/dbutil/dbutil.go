@@ -80,6 +80,43 @@ func (cfg MysqlConfig) Driver() string {
 	return "mysql"
 }
 
+// PostgresConfig configuration info for a MySQL databse.
+type PostgresConfig struct {
+	Host            string `json:"host,omitempty"`
+	Port            string `json:"port,omitempty"`
+	User            string `json:"user,omitempty"`
+	Password        string `json:"password,omitempty"`
+	Database        string `json:"database,omitempty"`
+	SSLMode         string `json:"sslMode,omitempty"`
+	BinaryParamters string `json:"binaryParamters,omitempty"`
+}
+
+// DSN gets the datasource name.
+func (cfg PostgresConfig) DSN() string {
+	port := cfg.Port
+	if port == "" {
+		port = "5432"
+	}
+
+	ssl := cfg.SSLMode
+	if ssl == "" {
+		ssl = "disable"
+	}
+
+	binaryParams := cfg.BinaryParamters
+	if binaryParams == "" {
+		binaryParams = "no"
+	}
+
+	connectionTemplate := "host=%s user=%s password=%s dbname=%s port=%s sslmode=%s binary_parameters=%s"
+	return fmt.Sprintf(connectionTemplate, cfg.Host, cfg.User, cfg.Password, cfg.Database, port, ssl, binaryParams)
+}
+
+// Driver gets the SQLite driver name.
+func (cfg PostgresConfig) Driver() string {
+	return "postgres"
+}
+
 // SqliteConfig configuration info for a SQLite databse.
 type SqliteConfig struct {
 	DriverName string `json:"driverName"`

@@ -1,11 +1,11 @@
 FROM golang:1.12-alpine3.10 AS build
 
 # Copy source
-WORKDIR /app/chatbot
+WORKDIR /app/text-service
 COPY . .
 
 # Download dependencies application
-WORKDIR /app/chatbot/cmd
+WORKDIR /app/text-service/cmd
 RUN go mod download
 
 # Build application.
@@ -13,10 +13,10 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 
 FROM alpine:3.10 AS run
 
-WORKDIR /etc/chatbot/migrations
+WORKDIR /etc/text-service/migrations
 COPY ./resources/db/ .
 
 WORKDIR /opt/app
-COPY --from=build /app/chatbot/cmd/cmd chatbot
+COPY --from=build /app/text-service/cmd/cmd text-service
 ENV GIN_MODE release
-CMD ["./chatbot"]
+CMD ["./text-service"]

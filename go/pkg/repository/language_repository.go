@@ -46,7 +46,7 @@ func (r *languageRepo) Find(ctx *context.Context, language string) (models.Langu
 	}
 
 	if err != nil {
-		return models.Language{}, errors.Wrapf(err, "Failed to query language: %s", language)
+		return models.Language{}, errors.Wrapf(err, "Failed to query language. language=%s", language)
 	}
 
 	return lang, nil
@@ -58,7 +58,7 @@ func (r *languageRepo) Save(ctx *context.Context, language string) error {
 	log.Debugw("languageRepo.Save", "language", language, "ctx", ctx)
 	_, err := r.db.ExecContext(ctx, saveLanguageQuery, language, time.Now())
 	if err != nil {
-		return errors.Wrapf(err, "Failed to insert language: %s", language)
+		return errors.Wrapf(err, "Failed to insert language. language=%s", language)
 	}
 
 	return nil

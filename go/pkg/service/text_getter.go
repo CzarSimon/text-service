@@ -15,21 +15,25 @@ var log = logger.GetDefaultLogger("pkg/service").Sugar()
 // TextGetter interface for getting texts by for a given language.
 type TextGetter interface {
 	Get(ctx *context.Context, key string) (models.Texts, error)
+	GetGroup(ctx *context.Context, groupID string) (models.Texts, error)
 }
 
 // NewTextGetter creates a new TextGetter using the default implementation.
 func NewTextGetter(
 	languageRepo repository.LanguageRepository,
-	textRepo repository.TextRepository) TextGetter {
+	textRepo repository.TextRepository,
+	groupRepo repository.GroupRepository) TextGetter {
 	return &getter{
 		languageRepo: languageRepo,
 		textRepo:     textRepo,
+		groupRepo:    groupRepo,
 	}
 }
 
 type getter struct {
 	languageRepo repository.LanguageRepository
 	textRepo     repository.TextRepository
+	groupRepo    repository.GroupRepository
 }
 
 func (g *getter) Get(ctx *context.Context, key string) (models.Texts, error) {
@@ -48,9 +52,29 @@ func (g *getter) Get(ctx *context.Context, key string) (models.Texts, error) {
 		return nil, httputil.ErrInternalServerError
 	}
 
-	texts := make(models.Texts)
-	texts[text.Key] = text.Value
-	return texts, nil
+	return mapTextsToMap(text), nil
+}
+
+func (g *getter) GetGroup(ctx *context.Context, groupID string) (models.Texts, error) {
+	log.Debugw("getter.GetGroup", "groupId", groupID, "ctx", ctx)
+
+	err := g.assertLanguageExists(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	texts, err := g.groupRepo.FindTexts(ctx, groupID, ctx.Language)
+	if err != nil {
+		log.Errorw("Failed to find texts by group", "error", err, "ctx", ctx)
+		return nil, httputil.ErrInternalServerError
+	}
+
+	if len(texts) == 0 {
+		log.Infow("No texts for group. groupId="+groupID, "ctx", ctx)
+		return nil, httputil.ErrNotFound
+	}
+
+	return mapTextsToMap(texts...), nil
 }
 
 func (g *getter) assertLanguageExists(ctx *context.Context) error {
@@ -67,4 +91,13 @@ func (g *getter) assertLanguageExists(ctx *context.Context) error {
 	}
 
 	return nil
+}
+
+func mapTextsToMap(texts ...models.TranslatedText) models.Texts {
+	textMap := make(models.Texts)
+	for _, text := range texts {
+		textMap[text.Key] = text.Value
+	}
+
+	return textMap
 }
