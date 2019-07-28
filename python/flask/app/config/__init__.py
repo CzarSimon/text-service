@@ -10,7 +10,7 @@ dictConfig(LOGGING_CONIFG)
 
 
 SERVICE_NAME: str = "text-service"
-SERVICE_VERSION: str = "0.1.0"
+SERVICE_VERSION: str = "0.2.0"
 SERVER_NAME: str = f"{SERVICE_NAME}/{SERVICE_VERSION}"
 REQUEST_ID_HEADER: str = "X-Request-ID"
 LANGUAGE_HEADER = "Accept-Language"

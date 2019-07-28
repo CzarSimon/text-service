@@ -7,7 +7,7 @@ from app.httputil import status
 
 # Intenal modules
 from tests import TestEnvironment, JSON, headers, new_id
-from app.models import TranslatedText, Language, Group, TextGroup
+from app.models import TranslatedText, Language, TextGroup, TextGroupMembership
 
 
 def test_get_text():
@@ -58,10 +58,10 @@ def test_get_text_by_group():
         TranslatedText(key="NOT_IN_GROUP", language="sv", value="sv-other-val"),
         TranslatedText(key="NOT_IN_GROUP", language="en", value="en-other-val"),
         TranslatedText(key="ONLY_SV_TEXT_KEY", language="sv", value="sv-only-val"),
-        Group(id="MOBILE_APP"),
-        TextGroup(text_key="TEST_TEXT_KEY", group_id="MOBILE_APP"),
-        TextGroup(text_key="OTHER_TEXT_KEY", group_id="MOBILE_APP"),
-        TextGroup(text_key="ONLY_SV_TEXT_KEY", group_id="MOBILE_APP"),
+        TextGroup(id="MOBILE_APP"),
+        TextGroupMembership(text_key="TEST_TEXT_KEY", group_id="MOBILE_APP"),
+        TextGroupMembership(text_key="OTHER_TEXT_KEY", group_id="MOBILE_APP"),
+        TextGroupMembership(text_key="ONLY_SV_TEXT_KEY", group_id="MOBILE_APP"),
     ]
 
     with TestEnvironment(items) as client:
@@ -92,7 +92,7 @@ def test_get_text_by_group():
         res_en = client.get("/v1/texts/group/MOBILE_APP", headers=en_headers_ok)
         assert res_en.status_code == status.HTTP_200_OK
         body = res_en.get_json()
-        assert len(body) == 3
+        assert len(body) == 2
         assert body["TEST_TEXT_KEY"] == "en-text-val"
         assert body["OTHER_TEXT_KEY"] == "en-other-val"
-        assert body["ONLY_SV_TEXT_KEY"] == None
+        assert "ONLY_SV_TEXT_KEY" not in body

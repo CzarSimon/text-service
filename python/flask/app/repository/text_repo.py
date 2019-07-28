@@ -5,7 +5,7 @@ from typing import List, Optional
 from app.httputil.instrumentation import trace
 
 # Internal modules
-from app.models import TranslatedText, TextGroup, Group
+from app.models import TranslatedText, TextGroup
 
 
 @trace("text_repo")
@@ -24,5 +24,5 @@ def find_by_keys(keys: List[str], language: str) -> List[TranslatedText]:
 
 
 @trace("text_repo")
-def find_group(group_id) -> Optional[Group]:
-    return Group.query.filter(Group.id == group_id).first()
+def find_group(group_id) -> Optional[TextGroup]:
+    return TextGroup.query.filter(TextGroup.id == group_id).first()

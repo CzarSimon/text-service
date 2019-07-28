@@ -1,5 +1,6 @@
 # Standard library
 import os
+import sys
 
 
 def get_dsn(storage_type: str) -> str:
@@ -9,6 +10,9 @@ def get_dsn(storage_type: str) -> str:
         return _get_postgres_dsn()
     if storage_type == "sqlite":
         return _get_sqlite_dsn()
+    if storage_type == "mysql":
+        print("MYSQL is not yet supported")
+        sys.exit(1)
     return _get_postgres_dsn()
 
 

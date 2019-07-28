@@ -6,7 +6,7 @@ from app.httputil.error import NotFoundError, BadRequestError
 from app.httputil.instrumentation import trace
 
 # Internal modules
-from app.models import TranslatedText, Language, Group
+from app.models import TranslatedText, Language, TextGroup
 from app.repository import text_repo, language_repo
 
 
@@ -25,12 +25,11 @@ def get_text_by_group(group_id: str, language: str) -> Dict[str, Optional[str]]:
     group = _assert_group(group_id)
     keys = [text_group.text_key for text_group in group.texts]
     texts = text_repo.find_by_keys(keys, language)
-    text_dict = {text.key: text.value for text in texts}
-    return {key: text_dict.get(key, None) for key in keys}
+    return {text.key: text.value for text in texts}
 
 
 @trace("text_service")
-def _assert_group(group_id: str) -> Group:
+def _assert_group(group_id: str) -> TextGroup:
     group = text_repo.find_group(group_id)
     if not group:
         raise NotFoundError(f"No such group: {group_id}")
