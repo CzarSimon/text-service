@@ -101,8 +101,9 @@ type calcDuration func() float64
 func createTimer() calcDuration {
 	start := time.Now()
 
+	// Returns latency in milliseconds.
 	return func() float64 {
 		end := time.Now()
-		return float64(end.Sub(start) / time.Microsecond)
+		return float64(end.Sub(start)) / 1e6
 	}
 }
